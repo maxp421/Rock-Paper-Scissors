@@ -1,67 +1,135 @@
-'strict mode'
-function getComputerChoice() {
-  const choices = ['rock', 'paper', 'scissors'];
-  return choices[Math.floor(3 * Math.random())]
+//Start starts everything up.
+//Play one round plays one round and displays results, forwards round results to
+//a game function which keeps track of the score and the game itself. After game is
+//won player gets a retry button which allows resetting everything to default.
+"use strict";
+
+const score = {
+  wins: 0,
+  losses: 0,
+  victory: function() {
+    this.wins++;
+  },
+  defeat: function() {
+    this.losses++;
+  },
+  draw: function() {
+    this.wins++;
+    this.losses++;
+  },
+};
+
+const rps = document.querySelector(".rps");
+const startBtn = document.querySelector(".rps__status-start-btn");
+const statusTxt = document.querySelector("#statusTxt");
+
+startBtn.addEventListener("click", start);
+
+const hiddenElements = document.querySelectorAll(".hidden");
+const positionShiftedElems = rps.querySelectorAll(".position-shifted");
+
+const buttonsContainer = document.querySelector(".rps__buttons-container");
+buttonsContainer.addEventListener("click", pickNextMove);
+
+function start() {
+  function changeUI() {
+    for (let ele of hiddenElements) {
+      ele.classList.remove("hidden");
+    }
+    startBtn.classList.add("hidden");
+    statusTxt.textContent = "Choose your next move!";
+
+    setTimeout(() => {
+      for (let elem of positionShiftedElems) {
+        console.log(elem);
+        elem.classList.toggle("position-shifted");
+      }
+    }, 10);
+  }
+  changeUI();
 }
 
-function playOneRound() {
-  let playerChoice;
-  while (1) {
-    playerChoice =
-      prompt('Please choose between rock, paper or scissors').toLowerCase();
-    if (
-      playerChoice === 'rock' ||
-      playerChoice === 'paper' ||
-      playerChoice === 'scissors'
-    ) { break; }
-  }
-  console.log(`You chose ${playerChoice}`);
+function pickNextMove(e) {
+  const button = e.target.closest("button");
+  if (!button) return;
+  if (!button.contains(e.target)) return;
 
-  let computerChoice = getComputerChoice();
-  console.log(`The computer chose ${computerChoice}`)
-
-  if (playerChoice === computerChoice) {
-    console.log(`It's a draw!`);
-    return 'draw';
-  }
-  else if (playerChoice === 'rock' && computerChoice == 'scissors') {
-    console.log('You won the round.');
-    return 'victory';
-  }
-  else if (playerChoice === 'paper' && computerChoice == 'rock') {
-    console.log('You won the round.');
-    return 'victory';
-  }
-  else if (playerChoice === 'scissors' && computerChoice == 'paper') {
-    console.log('You won the round.');
-    return 'victory';
-  }
-  else {
-    console.log('You lost the round.');
-    return 'defeat';
-  }
+  playOneRound(button.dataset.move);
 }
 
-function game() {
-  let score = {
-    wins: 0,
-    losses: 0
+function playOneRound(input) {
+  function getComputerChoice() {
+    const choices = ["rock", "paper", "scissors"];
+    return choices[Math.floor(3 * Math.random())];
   }
+  const computerChoice = getComputerChoice();
 
-  for (let i = 0; i < 5; i++) {
-    let result = playOneRound();
-    if (result === 'draw') {
+  const statusTxtPlayer = document.querySelector("#statusTxtPlayer");
+  const statusTxtPc = document.querySelector("#statusTxtPc");
+  statusTxtPlayer.textContent = `You chose ${input}`;
+  statusTxtPc.textContent = `The computer chose ${computerChoice}`;
+
+  if (input === computerChoice) {
+    return updateScore("draw");
+  } else if (input === "rock" && computerChoice === "scissors") {
+    return updateScore("victory");
+  } else if (input === "paper" && computerChoice === "rock") {
+    return updateScore("victory");
+  } else if (input === "scissors" && computerChoice === "paper") {
+    return updateScore("victory");
+  } else {
+    return updateScore("defeat");
+  }
+}
+function updateScore(result) {
+  const scorePlayer = document.querySelector("#scorePlayer");
+  const scorePc = document.querySelector("#scorePc");
+  switch (result) {
+    case "draw":
       score.wins++;
       score.losses++;
-    }
-    if (result === 'victory') {
+      statusTxt.textContent = "It's a draw!";
+      break;
+    case "victory":
       score.wins++;
-    }
-    if (result === 'defeat') {
+      statusTxt.textContent = "You won the round!";
+      break;
+    case "defeat":
       score.losses++;
-    }
-    console.log(score);
+      statusTxt.textContent = "You lost the round!";
+      break;
+  }
+  scorePlayer.textContent = score.wins;
+  scorePc.textContent = score.losses;
+
+  if (score.losses === 5 && score.wins === 5) {
+    buttonsContainer.removeEventListener("click", pickNextMove);
+    setTimeout(() => gameOver("draw"), 1000);
+  } else if (score.wins === 5) {
+    buttonsContainer.removeEventListener("click", pickNextMove);
+    setTimeout(() => gameOver("victory"), 1000);
+  } else if (score.losses === 5) {
+    buttonsContainer.removeEventListener("click", pickNextMove);
+    setTimeout(() => gameOver("loss"), 1000);
   }
 }
 
-game();
+function gameOver(status) {
+  for (let elem of positionShiftedElems) {
+    elem.classList.toggle("position-shifted");
+  }
+  switch (status) {
+    case "victory":
+      statusTxt.textContent = `Congratulations! You won the game with the score of ${score.wins} to ${score.losses}`;
+      break;
+    case "loss":
+      statusTxt.textContent = `Unfortunately you lost the game with the score of ${score.wins} to ${score.losses}`;
+      break;
+    case "draw":
+      statusTxt.textContent = `The game ended with a draw with the score of ${score.wins} to ${score.losses}`;
+      break;
+  }
+  // for(let elem of hiddenElements){
+  //   elem.classList.toggle('hidden');
+  // }
+}

@@ -1,15 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors</title>
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
+    <!-- Add ROCK PAPER SCISSORS title and a big start button. After press title and btn 
+      fade away and UI flies in -->
+    <div class="rps">
+      <div class="rps__score-container hidden position-shifted">
+        <div class="rps__score rps__score--player">
+          <p class="rps__score-text">Player</p>
+          <p id="scorePlayer" class="rps__score-text">0</p>
+        </div>
+        <div class="rps__score rps__score--pc">
+          <p class="rps__score-text">Computer</p>
+          <p id="scorePc" class="rps__score-text">0</p>
+        </div>
+      </div>
 
+      <div class="rps__status-flex">
+        <p id="statusTxt" class="rps__status-text rps__status-text--heading">
+          Press START to play a game of Rock Paper Scissors
+        </p>
+        <button class="rps__status-start-btn">START</button>
+        <div class="rps__status-output-container">
+          <p
+            id="statusTxtPlayer"
+            class="rps__status-text hidden position-shifted"
+          ></p>
+          <p
+            id="statusTxtPc"
+            class="rps__status-text hidden position-shifted"
+          ></p>
+        </div>
+      </div>
+
+      <div class="rps__buttons-container hidden position-shifted">
+        <button class="rps__button" data-move="rock">
+          <span>Rock</span>
+          <img src="icons/rock.svg" alt="" />
+        </button>
+        <button class="rps__button" data-move="paper">
+          <span>Paper</span>
+          <img src="icons/paper.svg" alt="" />
+        </button>
+        <button class="rps__button" data-move="scissors">
+          <p>Scissors</p>
+          <img src="icons/scissors.svg" alt="" />
+        </button>
+      </div>
+    </div>
     <script src="main.js"></script>
-</body>
-
+  </body>
 </html>

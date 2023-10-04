@@ -1,0 +1,149 @@
+/* RESET */
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+/*
+  Typographic tweaks!
+  3. Add accessible line-height
+  4. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+  5. Improve media defaults
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+  6. Remove built-in form typography styles
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/*
+  7. Avoid text overflows
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/*
+  8. Create a root stacking context
+*/
+#root,
+#__next {
+  isolation: isolate;
+}
+
+/* End of reset*/
+.rps {
+  max-width: Max(35vw, 600px);
+  margin-inline: auto;
+  margin-top: 10vh;
+  background-color: limegreen;
+  padding: 30px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.rps * {
+  transition: all 0.7s;
+}
+.rps__score-container {
+  display: flex;
+  justify-content: space-between;
+  transition: all 1s;
+}
+.rps__score {
+  background-color: red;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75); */
+}
+.rps__score--pc {
+  background-color: blue;
+  border-radius: 0 8px 8px 0;
+  width: 100%;
+}
+.rps__score--player {
+  background-color: red;
+  border-radius: 8px 0 0 8px;
+  width: 100%;
+}
+.rps__score-text {
+  font-size: 40px;
+}
+
+.rps__status-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 200px;
+}
+.rps__status-output-container{
+  display:flex;
+  width: 90%;
+  justify-content: space-between;
+  gap: 10%; 
+}
+.rps__status-text {
+  font-size: 20px;
+  text-align: center;
+}
+.rps__status-text--heading{
+  font-size: 35px;
+}
+.rps__status-start-btn {
+  padding: 30px 60px;
+}
+
+.rps__buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+.rps__button {
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rps__button img {
+  height: 70px;
+}
+
+.hidden {
+  display: none;
+}
+.position-shifted{
+  transform: translateX(-300%);
+}
