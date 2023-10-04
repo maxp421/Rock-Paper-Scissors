@@ -1,22 +1,7 @@
-//Start starts everything up.
-//Play one round plays one round and displays results, forwards round results to
-//a game function which keeps track of the score and the game itself. After game is
-//won player gets a retry button which allows resetting everything to default.
 "use strict";
-
 const score = {
   wins: 0,
   losses: 0,
-  victory: function() {
-    this.wins++;
-  },
-  defeat: function() {
-    this.losses++;
-  },
-  draw: function() {
-    this.wins++;
-    this.losses++;
-  },
 };
 
 const rps = document.querySelector(".rps");
@@ -26,7 +11,7 @@ const statusTxt = document.querySelector("#statusTxt");
 startBtn.addEventListener("click", start);
 
 const hiddenElements = document.querySelectorAll(".hidden");
-const positionShiftedElems = rps.querySelectorAll(".position-shifted");
+const positionShiftedElems = rps.querySelectorAll("[data-shifted]");
 
 const buttonsContainer = document.querySelector(".rps__buttons-container");
 buttonsContainer.addEventListener("click", pickNextMove);
@@ -41,8 +26,7 @@ function start() {
 
     setTimeout(() => {
       for (let elem of positionShiftedElems) {
-        console.log(elem);
-        elem.classList.toggle("position-shifted");
+        elem.dataset.shifted='false';
       }
     }, 10);
   }
@@ -86,8 +70,6 @@ function updateScore(result) {
   const scorePc = document.querySelector("#scorePc");
   switch (result) {
     case "draw":
-      score.wins++;
-      score.losses++;
       statusTxt.textContent = "It's a draw!";
       break;
     case "victory":
@@ -116,7 +98,7 @@ function updateScore(result) {
 
 function gameOver(status) {
   for (let elem of positionShiftedElems) {
-    elem.classList.toggle("position-shifted");
+    elem.dataset.shifted = "true";
   }
   switch (status) {
     case "victory":
@@ -129,7 +111,4 @@ function gameOver(status) {
       statusTxt.textContent = `The game ended with a draw with the score of ${score.wins} to ${score.losses}`;
       break;
   }
-  // for(let elem of hiddenElements){
-  //   elem.classList.toggle('hidden');
-  // }
 }
