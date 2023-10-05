@@ -3,33 +3,39 @@ const score = {
   wins: 0,
   losses: 0,
 };
-
-const rps = document.querySelector(".rps");
 const startBtn = document.querySelector(".rps__status-start-btn");
 const statusTxt = document.querySelector("#statusTxt");
+const elemsHiddenAtStart = document.querySelectorAll(".hidden");
+const buttonsContainer = document.querySelector(".rps__buttons-container");
+const statusTxtPlayer = document.querySelector("#statusTxtPlayer");
+const statusTxtPc = document.querySelector("#statusTxtPc");
+const scorePlayer = document.querySelector("#scorePlayer");
+const scorePc = document.querySelector("#scorePc");
 
 startBtn.addEventListener("click", start);
 
-const hiddenElements = document.querySelectorAll(".hidden");
-const positionShiftedElems = rps.querySelectorAll("[data-shifted]");
-
-const buttonsContainer = document.querySelector(".rps__buttons-container");
-buttonsContainer.addEventListener("click", pickNextMove);
-
 function start() {
   function changeUI() {
-    for (let ele of hiddenElements) {
+    for (let ele of elemsHiddenAtStart) {
       ele.classList.remove("hidden");
     }
     startBtn.classList.add("hidden");
     statusTxt.textContent = "Choose your next move!";
 
     setTimeout(() => {
-      for (let elem of positionShiftedElems) {
-        elem.dataset.shifted='false';
+      for (let ele of elemsHiddenAtStart) {
+        ele.dataset.shifted = "false";
       }
     }, 10);
   }
+
+  score.wins = 0;
+  score.losses = 0;
+  statusTxtPlayer.textContent = "";
+  statusTxtPc.textContent = "";
+  scorePlayer.textContent = "0";
+  scorePc.textContent = "0";
+  buttonsContainer.addEventListener("click", pickNextMove);
   changeUI();
 }
 
@@ -46,28 +52,28 @@ function playOneRound(input) {
     const choices = ["rock", "paper", "scissors"];
     return choices[Math.floor(3 * Math.random())];
   }
-  const computerChoice = getComputerChoice();
-
-  const statusTxtPlayer = document.querySelector("#statusTxtPlayer");
-  const statusTxtPc = document.querySelector("#statusTxtPc");
-  statusTxtPlayer.textContent = `You chose ${input}`;
-  statusTxtPc.textContent = `The computer chose ${computerChoice}`;
-
-  if (input === computerChoice) {
-    return updateScore("draw");
-  } else if (input === "rock" && computerChoice === "scissors") {
-    return updateScore("victory");
-  } else if (input === "paper" && computerChoice === "rock") {
-    return updateScore("victory");
-  } else if (input === "scissors" && computerChoice === "paper") {
-    return updateScore("victory");
+  const result = {
+    result: null,
+    computerChoice: getComputerChoice(),
+    playerChoice: input,
+  };
+  if (input === result.computerChoice) {
+    result.result = "draw";
+  } else if (input === "rock" && result.computerChoice === "scissors") {
+    result.result = "victory";
+  } else if (input === "paper" && result.computerChoice === "rock") {
+    result.result = "victory";
+  } else if (input === "scissors" && result.computerChoice === "paper") {
+    result.result = "victory";
   } else {
-    return updateScore("defeat");
+    result.result = "defeat";
   }
+  return updateUI(result);
 }
-function updateScore(result) {
-  const scorePlayer = document.querySelector("#scorePlayer");
-  const scorePc = document.querySelector("#scorePc");
+
+function updateUI({ result, computerChoice, playerChoice } = param) {
+  statusTxtPlayer.textContent = `You chose ${playerChoice}`;
+  statusTxtPc.textContent = `The computer chose ${computerChoice}`;
   switch (result) {
     case "draw":
       statusTxt.textContent = "It's a draw!";
@@ -84,31 +90,29 @@ function updateScore(result) {
   scorePlayer.textContent = score.wins;
   scorePc.textContent = score.losses;
 
-  if (score.losses === 5 && score.wins === 5) {
+  if (score.wins === 5 || score.losses === 5) {
     buttonsContainer.removeEventListener("click", pickNextMove);
-    setTimeout(() => gameOver("draw"), 1000);
-  } else if (score.wins === 5) {
-    buttonsContainer.removeEventListener("click", pickNextMove);
-    setTimeout(() => gameOver("victory"), 1000);
-  } else if (score.losses === 5) {
-    buttonsContainer.removeEventListener("click", pickNextMove);
-    setTimeout(() => gameOver("loss"), 1000);
+    return setTimeout(
+      () => gameOver(score.wins === 5 ? "victory" : "loss"),
+      1000
+    );
   }
 }
 
 function gameOver(status) {
-  for (let elem of positionShiftedElems) {
+  for (let elem of elemsHiddenAtStart) {
     elem.dataset.shifted = "true";
   }
-  switch (status) {
-    case "victory":
-      statusTxt.textContent = `Congratulations! You won the game with the score of ${score.wins} to ${score.losses}`;
-      break;
-    case "loss":
+  setTimeout(() => {
+    for (let elem of elemsHiddenAtStart) {
+      elem.classList.add("hidden");
+    }
+
+    statusTxt.textContent = `Congratulations! You won the game with the score of ${score.wins} to ${score.losses}`;
+    if (status === "loss") {
       statusTxt.textContent = `Unfortunately you lost the game with the score of ${score.wins} to ${score.losses}`;
-      break;
-    case "draw":
-      statusTxt.textContent = `The game ended with a draw with the score of ${score.wins} to ${score.losses}`;
-      break;
-  }
+    }
+    startBtn.textContent = "Play again?";
+    startBtn.classList.toggle("hidden");
+  }, 400);
 }

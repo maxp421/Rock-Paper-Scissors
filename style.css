@@ -79,7 +79,7 @@ body{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-width: Max(35vw, 600px);
+  max-width: Max(35vw, 700px);
   height: 500px;
   margin-inline: auto;
   margin-top: 10vh;
@@ -163,7 +163,7 @@ body{
 }
 .rps__button:active{
   transition: 0s;
-  box-shadow: 0px 0px 20px 20px rgba(38,20,71,1);
+  box-shadow: 0px 0px 15px 15px rgba(38,20,71,1);
 }
 .rps__button img {
   height: 70px;
