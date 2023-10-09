@@ -3,7 +3,7 @@ const score = {
   wins: 0,
   losses: 0,
 };
-const startBtn = document.querySelector(".rps__status-start-btn");
+const startBtn = document.querySelector("#start-btn");
 const statusTxt = document.querySelector("#statusTxt");
 const elemsHiddenAtStart = document.querySelectorAll(".hidden");
 const buttonsContainer = document.querySelector(".rps__buttons-container");
